@@ -6,7 +6,7 @@ users.forEach(item => {
 })
 
 const listUsers = () => {
-    const checkStatus = users.every(item => item.pontuacao > 0);
+    const checkStatus = users.every(item => item.pontuacao > -1);
 
     if(!checkStatus){
         setTimeout(()=> listUsers(), 100);
