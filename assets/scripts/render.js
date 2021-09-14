@@ -1,44 +1,51 @@
 const list = document.querySelector('#list');
 const loading = document.querySelector('.loading__container');
-       
-users.forEach(item => {
-    fetch(item.api_request).then(res => res.json()).then(data => item.pontuacao = data.honor);
-})
 
-const listUsers = () => {
-    const checkStatus = users.every(item => item.pontuacao > -1);
+const getData = async () => {
 
-    if(!checkStatus){
-        setTimeout(()=> listUsers(), 100);
-    } else {
-        loading.style.display = 'none';
-        list.style.display = 'initial';
-        renderElements();
-    } 
+    await Promise.all(
+        users.map(async item => {
+            await fetch(item.api_request)
+                .then(res => res.json())
+                .then(res => item.pontuacao = res.honor)
+        })
+    ).then(() => renderElementsByPoints());
+
 }
 
-const renderElements = () => {
+const renderElementsByPoints = () => {
 
-    let timer = 100;
+    loading.style.display = 'none';
+    list.style.display = 'initial';
 
     users = Object.values(users).sort((a, b) => b.pontuacao - a.pontuacao);
+
+    let opacityDelay = 100;
+
     users.forEach((item, index)=>{
+
         const li = document.createElement('li');
+        const spanPosition = document.createElement('span');
+        const spanName = document.createElement('span');
+        const spanPoints = document.createElement('span');
 
-        li.innerHTML = `<span class='position'>${index+1}º</span><span><a target='_blank' href='${item.perfil}'>${item.nome}</a></span><span class='points'><strong>${item.pontuacao}</strong></span>`
-        list.appendChild(li);              
-    })
+        spanPosition.className = 'user-position';
+        spanPosition.innerText = `${index + 1}º`;
+        spanName.innerHTML = `<a target='_blank' href='${item.perfil}'>${item.nome}</a>`;
+        spanPoints.className = 'user-points';
+        spanPoints.innerHTML = `<strong>${item.pontuacao}</strong>`;
 
-    let liElements = document.querySelectorAll('li');
-    
-    liElements.forEach(li => {
+        li.append(spanPosition, spanName, spanPoints);
+        list.append(li); 
+        
         setTimeout(()=> {
             li.style.opacity = 1;
-        }, timer+=130)
+        }, opacityDelay += 130);
+        
     })
+    
 }
 
-    
-setTimeout(()=>{
-    listUsers();
-}, 2000)
+window.onload = setTimeout(()=>{
+    getData();
+}, 2000);

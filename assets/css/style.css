@@ -102,7 +102,6 @@ body {
     box-shadow: 0 0 13px 3px #002c7e, inset 0 0 20px 5px #0000004d;
     border-radius: 50%;
     animation: loading_animation 2s infinite linear, loading_fadein 1s 1 ease-in-out;
-    position: relative;
 }
 
 .loading__container {
@@ -212,7 +211,7 @@ body {
     text-underline-offset: 4px;
 }
 
-.main__container ul li .position {
+.main__container ul li .user-position {
     background: white;
     color: black;
     min-width: 50px;
@@ -224,7 +223,7 @@ body {
     box-shadow: inset 0 0 3px 0px black;
 }
 
-.main__container ul li .points {
+.main__container ul li .user-points {
     min-width: 50px;
     text-align: center;
 }
